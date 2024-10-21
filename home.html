@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="title">SAW Method Calculation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Dark Mode Styles */
+        body.dark {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+
+        .dark .bg-white {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+
+        .dark .bg-gray-50 {
+            background-color: #4a5568;
+        }
+
+        .dark .bg-blue-600 {
+            background-color: #3182ce;
+        }
+
+        .dark .bg-blue-700 {
+            background-color: #2c5282;
+        }
+
+        .dark .bg-green-600 {
+            background-color: #38a169;
+        }
+
+        .dark .text-green-600 {
+            color: #48bb78;
+        }
+
+        .dark .text-green-700 {
+            color: #2f855a;
+        }
+
+        .dark .border-gray-300 {
+            border-color: #4a5568;
+        }
+
+        .dark .text-gray-600 {
+            color: #a0aec0;
+        }
+
+        .dark .text-gray-700,
+        .dark .text-gray-800,
+        .dark .text-gray-900,
+        .dark .text-black {
+            color: #e2e8f0;
+        }
+
+        .dark .text-blue-600 {
+            color: #63b3ed;
+        }
+
+        .dark .text-green-600,
+        .dark .text-green-700 {
+            color: #68d391;
+        }
+
+        .dark input, .dark select {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border-color: #718096;
+        }
+
+        .dark input::placeholder {
+            color: #a0aec0;
+        }
+
+        .dark .bg-gray-100 {
+            background-color: #2d3748;
+        }
+
+        .dark .bg-gray-50 {
+            background-color: #374151;
+        }
+
+        .dark .bg-purple-600 {
+            background-color: #6b46c1;
+        }
+
+        .dark .bg-yellow-600 {
+            background-color: #d69e2e;
+        }
+
+        .dark .bg-red-600 {
+            background-color: #c53030;
+        }
+
+        .dark th,
+        .dark td {
+            color: #e2e8f0;
+        }
+
+        /* Additional styles */
+        .custom-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .dark .custom-shadow {
+            box-shadow: 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06);
+        }
+
+        .btn {
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Improved accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Smooth transitions */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 640px) {
+            .overflow-x-auto {
+                overflow-x: auto;
+            }
+        }
+
+        /* Improved table responsiveness */
+        .responsive-table {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-100 to-green-100 dark:from-gray-900 dark:to-gray-800 min-h-screen flex items-center justify-center p-4 transition duration-500 ease-in-out">
+    <div class="bg-white dark:bg-gray-800 p-4 sm:p-8 rounded-lg shadow-lg w-full max-w-5xl fade-in">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-8">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-4 sm:mb-0 text-center sm:text-left" data-translate="title">SAW Method Calculation</h1>
+            <div class="flex items-center space-x-4">
+                <button id="toggle-dark-mode" class="text-blue-600 dark:text-blue-400 focus:outline-none btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m4.221 1.464l-.707.707M16 12h1m1.464-4.221l-.707-.707M12 21v-1m-4.221-1.464l.707-.707M8 12H7m-1.464 4.221l.707.707M12 3a9 9 0 100 18 9 9 0 000-18z" />
+                    </svg>
+                </button>
+                <select id="language-selector" class="bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg p-2 text-sm sm:text-base">
+                    <option value="en">English</option>
+                    <option value="id">Bahasa Indonesia</option>
+                    <option value="su">Basa Sunda</option>
+                    <option value="jv">Basa Jawa</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Penjelasan metode SAW -->
+        <div class="mb-8 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow-md">
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 text-blue-600 dark:text-blue-400" data-translate="about">About SAW Method</h3>
+            <p class="text-base sm:text-lg" data-translate="aboutText">Simple Additive Weighting (SAW) is a multi-criteria decision-making method. This method normalizes the decision matrix to a scale that can be compared across all existing alternatives, then sums the weights of each alternative's performance on all attributes.</p>
+        </div>
+
+        <!-- Form Section -->
+        <form id="saw-form" class="space-y-6 sm:space-y-8 fade-in">
+            <div id="criteria-container" class="space-y-4 sm:space-y-6">
+                <!-- Criteria fields will be added here dynamically -->
+            </div>
+            <div id="weight-validation" class="text-red-500 hidden">Total weight must be equal to 1 or 100%.</div>
+            
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                <button type="button" id="add-criteria" class="flex-1 bg-green-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-green-700 transition btn text-base sm:text-lg">
+                    <i class="fas fa-plus mr-2"></i><span data-translate="addCriteria">Add Criteria</span>
+                </button>
+                <button type="button" onclick="calculateSAW()" class="flex-1 bg-blue-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-blue-700 transition btn text-base sm:text-lg">
+                    <i class="fas fa-calculator mr-2"></i><span data-translate="calculate">Calculate</span>
+                </button>
+                <button type="button" onclick="resetForm()" class="flex-1 bg-red-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-red-700 transition btn text-base sm:text-lg">
+                    <i class="fas fa-undo mr-2"></i><span data-translate="reset">Reset</span>
+                </button>
+            </div>
+
+            <!-- Add new buttons for save, load, and delete -->
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
+                <button type="button" onclick="saveScenario()" class="flex-1 bg-purple-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-purple-700 transition btn text-base sm:text-lg">
+                    <i class="fas fa-save mr-2"></i><span data-translate="saveScenario">Save Scenario</span>
+                </button>
+                <button type="button" onclick="loadScenario()" class="flex-1 bg-yellow-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-yellow-700 transition btn text-base sm:text-lg">
+                    <i class="fas fa-folder-open mr-2"></i><span data-translate="loadScenario">Load Scenario</span>
+                </button>
+                <button type="button" onclick="deleteScenario()" class="flex-1 bg-red-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-red-700 transition btn text-base sm:text-lg">
+                    <i class="fas fa-trash-alt mr-2"></i><span data-translate="deleteScenario">Delete Scenario</span>
+                </button>
+            </div>
+        </form>
+
+        <!-- Results Section -->
+        <div id="result" class="mt-8 sm:mt-12 fade-in">
+            <!-- Add responsive-table class to the table container -->
+            <div class="responsive-table">
+                <!-- Table content will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Export buttons -->
+        <div id="export-buttons" class="mt-6 sm:mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 hidden">
+            <button onclick="exportToCSV()" class="flex-1 bg-purple-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-purple-700 transition btn text-base sm:text-lg">
+                <i class="fas fa-file-csv mr-2"></i><span data-translate="exportToCSV">Export to CSV</span>
+            </button>
+            <button onclick="exportToPDF()" class="flex-1 bg-yellow-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-yellow-700 transition btn text-base sm:text-lg">
+                <i class="fas fa-file-pdf mr-2"></i><span data-translate="exportToPDF">Export to PDF</span>
+            </button>
+            <button onclick="exportToExcel()" class="flex-1 bg-green-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-green-700 transition btn text-base sm:text-lg">
+                <i class="fas fa-file-excel mr-2"></i><span data-translate="exportToExcel">Export to Excel</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js" defer></script>
+
+    <script>
+        let criteriaCount = 0;
+        let alternatives = [];
+        let normalizationData = [];
+        let weightedData = [];
+        let totalScore = 0;
+
+        document.getElementById('add-criteria').addEventListener('click', addCriteria);
+        document.getElementById('toggle-dark-mode').addEventListener('click', toggleDarkMode);
+
+        // Load saved criteria on page load
+        window.addEventListener('load', loadSavedCriteria);
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            saveDarkModePreference();
+        }
+
+        function saveDarkModePreference() {
+            const isDarkMode = document.body.classList.contains('dark');
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        function loadDarkModePreference() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                document.body.classList.add('dark');
+            }
+        }
+
+        function validateInput(value, type) {
+            if (type === 'name' && value.trim() === '') {
+                return 'Name cannot be empty';
+            }
+            if ((type === 'value' || type === 'weight') && (isNaN(value) || value <= 0)) {
+                return `${type.charAt(0).toUpperCase() + type.slice(1)} must be a positive number`;
+            }
+            return null;
+        }
+
+        function addCriteria() {
+            criteriaCount++;
+            const container = document.getElementById('criteria-container');
+            const criteriaHTML = `
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg custom-shadow" id="criteria-${criteriaCount}">
+                    <div>
+                        <label for="criteria-name-${criteriaCount}" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2" data-translate="name">Name</label>
+                        <input type="text" id="criteria-name-${criteriaCount}" class="w-full p-2 sm:p-3 border border-gray-300 rounded-lg bg-white dark:bg-gray-600 dark:border-gray-500" placeholder="Enter name" aria-label="Criteria name">
+                    </div>
+                    <div>
+                        <label for="criteria-value-${criteriaCount}" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2" data-translate="value">Value</label>
+                        <input type="number" id="criteria-value-${criteriaCount}" class="w-full p-2 sm:p-3 border border-gray-300 rounded-lg bg-white dark:bg-gray-600 dark:border-gray-500" placeholder="Enter value" aria-label="Criteria value">
+                    </div>
+                    <div>
+                        <label for="criteria-weight-${criteriaCount}" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2" data-translate="weight">Weight</label>
+                        <input type="number" id="criteria-weight-${criteriaCount}" class="w-full p-2 sm:p-3 border border-gray-300 rounded-lg bg-white dark:bg-gray-600 dark:border-gray-500" placeholder="Enter weight" value="1" aria-label="Criteria weight">
+                    </div>
+                    <div>
+                        <label for="criteria-type-${criteriaCount}" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2" data-translate="type">Type</label>
+                        <select id="criteria-type-${criteriaCount}" class="w-full p-2 sm:p-3 border border-gray-300 rounded-lg bg-white dark:bg-gray-600 dark:border-gray-500" aria-label="Criteria type">
+                            <option value="benefit" data-translate="benefit">Benefit</option>
+                            <option value="cost" data-translate="cost">Cost</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="button" onclick="removeCriteria(${criteriaCount})" class="bg-red-600 text-white p-2 sm:p-3 rounded-lg font-semibold hover:bg-red-700 transition w-full btn" aria-label="Remove criteria">
+                            <i class="fas fa-trash-alt mr-2"></i><span data-translate="remove">Remove</span>
+                        </button>
+                    </div>
+                    <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', criteriaHTML);
+
+            // Save criteria after adding
+            saveCriteria();
+        }
+
+        function removeCriteria(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const criteria = document.getElementById(`criteria-${id}`);
+                    if (criteria) {
+                        criteria.remove();
+                        saveCriteria();
+                    }
+                    Swal.fire(
+                        'Deleted!',
+                        'Your criteria has been deleted.',
+                        'success'
+                    )
+                }
+            });
+        }
+
+        function saveCriteria() {
+            const criteriaData = [];
+            for (let i = 1; i <= criteriaCount; i++) {
+                const criteriaElement = document.getElementById(`criteria-${i}`);
+                if (criteriaElement) {
+                    criteriaData.push({
+                        name: document.getElementById(`criteria-name-${i}`).value,
+                        value: document.getElementById(`criteria-value-${i}`).value,
+                        weight: document.getElementById(`criteria-weight-${i}`).value,
+                        type: document.getElementById(`criteria-type-${i}`).value
+                    });
+                }
+            }
+            localStorage.setItem('sawCriteria', JSON.stringify(criteriaData));
+        }
+
+        function loadSavedCriteria() {
+            const savedCriteria = localStorage.getItem('sawCriteria');
+            if (savedCriteria) {
+                const criteriaData = JSON.parse(savedCriteria);
+                criteriaData.forEach(criteria => {
+                    addCriteria();
+                    const currentId = criteriaCount;
+                    document.getElementById(`criteria-name-${currentId}`).value = criteria.name;
+                    document.getElementById(`criteria-value-${currentId}`).value = criteria.value;
+                    document.getElementById(`criteria-weight-${currentId}`).value = criteria.weight;
+                    document.getElementById(`criteria-type-${currentId}`).value = criteria.type;
+                });
+            }
+            loadDarkModePreference();
+        }
+
+        function calculateSAW() {
+            let isValid = true;
+            for (let i = 1; i <= criteriaCount; i++) {
+                const nameElement = document.getElementById(`criteria-name-${i}`);
+                const valueElement = document.getElementById(`criteria-value-${i}`);
+                const weightElement = document.getElementById(`criteria-weight-${i}`);
+                const errorElement = document.querySelector(`#criteria-${i} .error-message`);
+
+                const nameError = validateInput(nameElement.value, 'name');
+                const valueError = validateInput(valueElement.value, 'value');
+                const weightError = validateInput(weightElement.value, 'weight');
+
+                if (nameError || valueError || weightError) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: nameError || valueError || weightError,
+                    });
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid) {
+                return;
+            }
+
+            // Validasi total bobot
+            let totalWeight = 0;
+            for (let i = 1; i <= criteriaCount; i++) {
+                const weightElement = document.getElementById(`criteria-weight-${i}`);
+                if (weightElement) {
+                    totalWeight += parseFloat(weightElement.value) || 0;
+                }
+            }
+            if (Math.abs(totalWeight - 1) > 0.01 && Math.abs(totalWeight - 100) > 0.01) {
+                document.getElementById('weight-validation').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('weight-validation').classList.add('hidden');
+            }
+
+            alternatives = [];
+            let maxValues = {};
+            let minValues = {};
+
+            for (let i = 1; i <= criteriaCount; i++) {
+                const nameElement = document.getElementById(`criteria-name-${i}`);
+                const valueElement = document.getElementById(`criteria-value-${i}`);
+                const weightElement = document.getElementById(`criteria-weight-${i}`);
+                const typeElement = document.getElementById(`criteria-type-${i}`);
+
+                if (!nameElement || !valueElement || !weightElement || !typeElement) {
+                    console.error(`One or more elements not found for criteria ${i}`);
+                    continue;
+                }
+
+                const name = nameElement.value;
+                const value = parseFloat(valueElement.value);
+                const weight = parseFloat(weightElement.value);
+                const type = typeElement.value;
+
+                if (!name || isNaN(value) || isNaN(weight)) {
+                    console.error(`Invalid input for criteria ${i}: name=${name}, value=${value}, weight=${weight}`);
+                    continue;
+                }
+
+                alternatives.push({ name, value, weight, type });
+
+                if (type === 'benefit') {
+                    maxValues[name] = Math.max(maxValues[name] || 0, value);
+                } else {
+                    minValues[name] = Math.min(minValues[name] || Infinity, value);
+                }
+            }
+
+            if (alternatives.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No Valid Criteria',
+                    text: 'No valid criteria found. Please enter valid data for at least one criterion.',
+                });
+                return;
+            }
+
+            normalizationData = [];
+            weightedData = [];
+            totalScore = 0;
+
+            alternatives.forEach(alt => {
+                let normalizedValue;
+                if (alt.type === 'benefit') {
+                    normalizedValue = alt.value / maxValues[alt.name];
+                } else {
+                    normalizedValue = minValues[alt.name] / alt.value;
+                }
+                const weightedValue = normalizedValue * alt.weight;
+                totalScore += weightedValue;
+
+                normalizationData.push({ name: alt.name, normalizedValue });
+                weightedData.push({ name: alt.name, weightedValue });
+            });
+
+            displayResults(normalizationData, weightedData, totalScore);
+
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Calculation Complete',
+                text: 'SAW method calculation has been successfully completed.',
+            });
+
+            // Tampilkan tombol ekspor
+            document.getElementById('export-buttons').classList.remove('hidden');
+        }
+
+        function displayResults(normalizationData, weightedData, totalScore) {
+            const resultContainer = document.getElementById('result');
+            resultContainer.innerHTML = `
+                <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-6 fade-in" data-translate="calculationResult">Calculation Result</h2>
+                <div class="responsive-table mb-8 fade-in">
+                    <table class="table-auto w-full bg-white dark:bg-gray-700 rounded-lg custom-shadow">
+                        <thead class="bg-gray-100 dark:bg-gray-600">
+                            <tr class="text-left">
+                                <th class="px-4 py-3 text-gray-700 dark:text-gray-300" data-translate="name">Name</th>
+                                <th class="px-4 py-3 text-gray-700 dark:text-gray-300" data-translate="originalValue">Original Value</th>
+                                <th class="px-4 py-3 text-gray-700 dark:text-gray-300" data-translate="weight">Weight</th>
+                                <th class="px-4 py-3 text-gray-700 dark:text-gray-300" data-translate="type">Type</th>
+                                <th class="px-4 py-3 text-gray-700 dark:text-gray-300" data-translate="normalizedValue">Normalized Value</th>
+                                <th class="px-4 py-3 text-gray-700 dark:text-gray-300" data-translate="weightedValue">Weighted Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${alternatives.map((alt, index) => `
+                                <tr class="${index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800' : ''}">
+                                    <td class="border-t px-4 py-3 text-gray-700 dark:text-gray-300">${alt.name}</td>
+                                    <td class="border-t px-4 py-3 text-gray-700 dark:text-gray-300">${alt.value.toFixed(4)}</td>
+                                    <td class="border-t px-4 py-3 text-gray-700 dark:text-gray-300">${alt.weight.toFixed(4)}</td>
+                                    <td class="border-t px-4 py-3 text-gray-700 dark:text-gray-300">${alt.type}</td>
+                                    <td class="border-t px-4 py-3 text-gray-700 dark:text-gray-300">${normalizationData[index].normalizedValue.toFixed(4)}</td>
+                                    <td class="border-t px-4 py-3 text-gray-700 dark:text-gray-300">${weightedData[index].weightedValue.toFixed(4)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-gray-700 dark:text-gray-300 mt-4 mb-8 text-lg"><strong data-translate="totalSAWScore">Total SAW Score:</strong> <span class="text-green-700 dark:text-green-500 font-bold">${totalScore.toFixed(4)}</span></p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white dark:bg-gray-700 p-6 rounded-lg custom-shadow">
+                        <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200" data-translate="weightedValuesChart">Weighted Values Chart</h3>
+                        <canvas id="weightedValuesChart"></canvas>
+                    </div>
+                    <div class="bg-white dark:bg-gray-700 p-6 rounded-lg custom-shadow">
+                        <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200" data-translate="criteriaWeightsChart">Criteria Weights Chart</h3>
+                        <canvas id="criteriaWeightsChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg custom-shadow mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200" data-translate="rankingOfAlternatives">Ranking of Alternatives</h3>
+                    <div class="responsive-table">
+                        <table class="table-auto w-full">
+                            <thead class="bg-gray-100 dark:bg-gray-600">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-300" data-translate="rank">Rank</th>
+                                    <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-300" data-translate="name">Name</th>
+                                    <th class="px-4 py-2 text-left text-gray-700 dark:text-gray-300" data-translate="weightedValue">Weighted Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${weightedData.sort((a, b) => b.weightedValue - a.weightedValue)
+                                    .map((data, index) => `
+                                        <tr class="${index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800' : ''}">
+                                            <td class="border-t px-4 py-2 text-gray-700 dark:text-gray-300">${index + 1}</td>
+                                            <td class="border-t px-4 py-2 text-gray-700 dark:text-gray-300">${data.name}</td>
+                                            <td class="border-t px-4 py-2 text-gray-700 dark:text-gray-300">${data.weightedValue.toFixed(4)}</td>
+                                        </tr>
+                                    `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            displayWeightedValuesChart(weightedData);
+            displayCriteriaWeightsChart(alternatives);
+        }
+
+        function getChartColors(isDarkMode) {
+            return {
+                backgroundColor: isDarkMode ? [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                ] : [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                ],
+                borderColor: isDarkMode ? [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                ] : [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                ],
+                textColor: isDarkMode ? '#e2e8f0' : '#2d3748',
+            };
+        }
+
+        function displayWeightedValuesChart(weightedData) {
+            const isDarkMode = document.body.classList.contains('dark');
+            const colors = getChartColors(isDarkMode);
+            const ctx = document.getElementById('weightedValuesChart').getContext('2d');
+            const labels = weightedData.map(data => data.name);
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Weighted Values',
+                    data: weightedData.map(data => data.weightedValue),
+                    backgroundColor: colors.backgroundColor,
+                    borderColor: colors.borderColor,
+                    borderWidth: 1
+                }]
+            };
+
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Weighted Values Chart'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toFixed(4);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: colors.textColor,
+                            },
+                        },
+                        x: {
+                            ticks: {
+                                color: colors.textColor,
+                            },
+                        },
+                    },
+                },
+            };
+
+            new Chart(ctx, config);
+
+            // Set a fixed height for the chart container
+            const chartContainer = document.getElementById('weightedValuesChart').parentNode;
+            chartContainer.style.height = '300px';
+        }
+
+        function displayCriteriaWeightsChart(alternatives) {
+            const isDarkMode = document.body.classList.contains('dark');
+            const colors = getChartColors(isDarkMode);
+            const ctx = document.getElementById('criteriaWeightsChart').getContext('2d');
+            const labels = alternatives.map(alt => alt.name);
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Criteria Weights',
+                    data: alternatives.map(alt => alt.weight),
+                    backgroundColor: colors.backgroundColor,
+                    borderColor: colors.borderColor,
+                    borderWidth: 1
+                }]
+            };
+
+            const config = {
+                type: 'pie',
+                data: data,
+                options: {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: colors.textColor,
+                            },
+                        },
+                    },
+                }
+            };
+
+            new Chart(ctx, config);
+        }
+
+        function exportToCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Name,Original Value,Weight,Type,Normalized Value,Weighted Value\n";
+            alternatives.forEach((alt, index) => {
+                csvContent += `${alt.name},${alt.value},${alt.weight},${alt.type},${normalizationData[index].normalizedValue.toFixed(4)},${weightedData[index].weightedValue.toFixed(4)}\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "saw_results.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("SAW Method Calculation Results", 10, 10);
+            let y = 20;
+            alternatives.forEach((alt, index) => {
+                doc.text(`${alt.name}: ${weightedData[index].weightedValue.toFixed(4)}`, 10, y);
+                y += 10;
+            });
+            doc.save("saw_results.pdf");
+        }
+
+        function exportToExcel() {
+            const ws = XLSX.utils.json_to_sheet(alternatives.map((alt, index) => ({
+                Name: alt.name,
+                "Original Value": alt.value,
+                Weight: alt.weight,
+                Type: alt.type,
+                "Normalized Value": normalizationData[index].normalizedValue.toFixed(4),
+                "Weighted Value": weightedData[index].weightedValue.toFixed(4)
+            })));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "SAW Results");
+            XLSX.writeFile(wb, "saw_results.xlsx");
+        }
+
+        function resetForm() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, reset it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('criteria-container').innerHTML = '';
+                    document.getElementById('result').innerHTML = '';
+                    document.getElementById('export-buttons').classList.add('hidden');
+                    criteriaCount = 0;
+                    alternatives = [];
+                    localStorage.removeItem('sawCriteria');
+                    Swal.fire(
+                        'Reset!',
+                        'Your form has been reset.',
+                        'success'
+                    )
+                }
+            })
+        }
+
+        function saveScenario() {
+            Swal.fire({
+                title: 'Save Scenario',
+                input: 'text',
+                inputLabel: 'Enter a name for this scenario:',
+                inputPlaceholder: 'Scenario name',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to enter a scenario name!';
+                    }
+                    const scenarios = JSON.parse(localStorage.getItem('sawScenarios') || '{}');
+                    if (scenarios[value]) {
+                        return 'A scenario with this name already exists. Please choose a different name.';
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const scenarioName = result.value;
+                    const criteriaData = [];
+                    for (let i = 1; i <= criteriaCount; i++) {
+                        const criteriaElement = document.getElementById(`criteria-${i}`);
+                        if (criteriaElement) {
+                            criteriaData.push({
+                                name: document.getElementById(`criteria-name-${i}`).value,
+                                value: document.getElementById(`criteria-value-${i}`).value,
+                                weight: document.getElementById(`criteria-weight-${i}`).value,
+                                type: document.getElementById(`criteria-type-${i}`).value
+                            });
+                        }
+                    }
+                    if (criteriaData.length === 0) {
+                        Swal.fire('Error', 'No criteria to save. Please add at least one criterion.', 'error');
+                        return;
+                    }
+                    const scenarios = JSON.parse(localStorage.getItem('sawScenarios') || '{}');
+                    scenarios[scenarioName] = criteriaData;
+                    localStorage.setItem('sawScenarios', JSON.stringify(scenarios));
+                    Swal.fire('Success', 'Scenario saved successfully!', 'success');
+                }
+            });
+        }
+
+        function loadScenario() {
+            const scenarios = JSON.parse(localStorage.getItem('sawScenarios') || '{}');
+            const scenarioNames = Object.keys(scenarios);
+            if (scenarioNames.length === 0) {
+                Swal.fire('Error', 'No saved scenarios found.', 'error');
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Load Scenario',
+                input: 'select',
+                inputOptions: scenarioNames.reduce((acc, name) => ({ ...acc, [name]: name }), {}),
+                inputPlaceholder: 'Select a scenario',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to select a scenario!';
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const selectedScenario = scenarios[result.value];
+                    if (!selectedScenario || selectedScenario.length === 0) {
+                        Swal.fire('Error', 'The selected scenario is empty or invalid.', 'error');
+                        return;
+                    }
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "This will replace your current criteria. Any unsaved changes will be lost.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, load it!'
+                    }).then((confirmResult) => {
+                        if (confirmResult.isConfirmed) {
+                            document.getElementById('criteria-container').innerHTML = '';
+                            criteriaCount = 0;
+                            selectedScenario.forEach(criteria => {
+                                addCriteria();
+                                const currentId = criteriaCount;
+                                document.getElementById(`criteria-name-${currentId}`).value = criteria.name;
+                                document.getElementById(`criteria-value-${currentId}`).value = criteria.value;
+                                document.getElementById(`criteria-weight-${currentId}`).value = criteria.weight;
+                                document.getElementById(`criteria-type-${currentId}`).value = criteria.type;
+                            });
+                            Swal.fire('Success', 'Scenario loaded successfully!', 'success');
+                        }
+                    });
+                }
+            });
+        }
+
+        function deleteScenario() {
+            const scenarios = JSON.parse(localStorage.getItem('sawScenarios') || '{}');
+            const scenarioNames = Object.keys(scenarios);
+            if (scenarioNames.length === 0) {
+                Swal.fire('Error', 'No saved scenarios found.', 'error');
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Delete Scenario',
+                input: 'select',
+                inputOptions: scenarioNames.reduce((acc, name) => ({ ...acc, [name]: name }), {}),
+                inputPlaceholder: 'Select a scenario to delete',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to select a scenario!';
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const scenarioToDelete = result.value;
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to delete the scenario "${scenarioToDelete}". This action cannot be undone.`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((confirmResult) => {
+                        if (confirmResult.isConfirmed) {
+                            delete scenarios[scenarioToDelete];
+                            localStorage.setItem('sawScenarios', JSON.stringify(scenarios));
+                            Swal.fire('Deleted!', `The scenario "${scenarioToDelete}" has been deleted.`, 'success');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+    <script>
+        // Language translations
+        const translations = {
+            en: {
+                title: "SAW Method Calculation",
+                about: "About SAW Method",
+                aboutText: "Simple Additive Weighting (SAW) is a multi-criteria decision-making method. This method normalizes the decision matrix to a scale that can be compared across all existing alternatives, then sums the weights of each alternative's performance on all attributes.",
+                addCriteria: "Add Criteria",
+                calculate: "Calculate",
+                reset: "Reset",
+                saveScenario: "Save Scenario",
+                loadScenario: "Load Scenario",
+                deleteScenario: "Delete Scenario",
+                name: "Name",
+                value: "Value",
+                weight: "Weight",
+                type: "Type",
+                benefit: "Benefit",
+                cost: "Cost",
+                remove: "Remove",
+                calculationResult: "Calculation Result",
+                originalValue: "Original Value",
+                normalizedValue: "Normalized Value",
+                weightedValue: "Weighted Value",
+                totalSAWScore: "Total SAW Score",
+                weightedValuesChart: "Weighted Values Chart",
+                criteriaWeightsChart: "Criteria Weights Chart",
+                rankingOfAlternatives: "Ranking of Alternatives",
+                rank: "Rank",
+                exportToCSV: "Export to CSV",
+                exportToPDF: "Export to PDF",
+                exportToExcel: "Export to Excel"
+            },
+            id: {
+                title: "Perhitungan Metode SAW",
+                about: "Tentang Metode SAW",
+                aboutText: "Simple Additive Weighting (SAW) adalah metode pengambilan keputusan multi-kriteria. Metode ini menormalisasi matriks keputusan ke skala yang dapat dibandingkan di semua alternatif yang ada, kemudian menjumlahkan bobot dari kinerja setiap alternatif pada semua atribut.",
+                addCriteria: "Tambah Kriteria",
+                calculate: "Hitung",
+                reset: "Reset",
+                saveScenario: "Simpan Skenario",
+                loadScenario: "Muat Skenario",
+                deleteScenario: "Hapus Skenario",
+                name: "Nama",
+                value: "Nilai",
+                weight: "Bobot",
+                type: "Tipe",
+                benefit: "Keuntungan",
+                cost: "Biaya",
+                remove: "Hapus",
+                calculationResult: "Hasil Perhitungan",
+                originalValue: "Nilai Asli",
+                normalizedValue: "Nilai Normalisasi",
+                weightedValue: "Nilai Terbobot",
+                totalSAWScore: "Total Skor SAW",
+                weightedValuesChart: "Grafik Nilai Terbobot",
+                criteriaWeightsChart: "Grafik Bobot Kriteria",
+                rankingOfAlternatives: "Peringkat Alternatif",
+                rank: "Peringkat",
+                exportToCSV: "Ekspor ke CSV",
+                exportToPDF: "Ekspor ke PDF",
+                exportToExcel: "Ekspor ke Excel"
+            },
+            su: {
+                title: "Itungan Metode SAW",
+                about: "Ngeunaan Metode SAW",
+                aboutText: "Simple Additive Weighting (SAW) nyaéta metode ngaambil kaputusan multi-kriteria. Metode ieu ngormalkeun matriks kaputusan kana skala anu tiasa dibandingkeun di sadaya alternatif anu aya, teras ngajumlahkeun bobot tina kinerja unggal alternatif dina sadaya atribut.",
+                addCriteria: "Tambih Kriteria",
+                calculate: "Itung",
+                reset: "Reset",
+                saveScenario: "Simpen Skenario",
+                loadScenario: "Muat Skenario",
+                deleteScenario: "Hapus Skenario",
+                name: "Nama",
+                value: "Nilai",
+                weight: "Bobot",
+                type: "Tipe",
+                benefit: "Keuntungan",
+                cost: "Biaya",
+                remove: "Hapus",
+                calculationResult: "Hasil Itungan",
+                originalValue: "Nilai Asli",
+                normalizedValue: "Nilai Normalisasi",
+                weightedValue: "Nilai Terbobot",
+                totalSAWScore: "Total Skor SAW",
+                weightedValuesChart: "Grafik Nilai Terbobot",
+                criteriaWeightsChart: "Grafik Bobot Kriteria",
+                rankingOfAlternatives: "Peringkat Alternatif",
+                rank: "Peringkat",
+                exportToCSV: "Ekspor ke CSV",
+                exportToPDF: "Ekspor ke PDF",
+                exportToExcel: "Ekspor ke Excel"
+            },
+            jv: {
+                title: "Itungan Metode SAW",
+                about: "Babagan Metode SAW",
+                aboutText: "Simple Additive Weighting (SAW) yaiku metode njupuk kaputusan multi-kriteria. Metode iki normalisasi matriks kaputusan menyang skala sing bisa dibandhingake ing kabeh alternatif sing ana, banjur njumlahake bobot saka kinerja saben alternatif ing kabeh atribut.",
+                addCriteria: "Tambah Kriteria",
+                calculate: "Itung",
+                reset: "Reset",
+                saveScenario: "Simpen Skenario",
+                loadScenario: "Muat Skenario",
+                deleteScenario: "Busak Skenario",
+                name: "Nama",
+                value: "Nilai",
+                weight: "Bobot",
+                type: "Tipe",
+                benefit: "Keuntungan",
+                cost: "Biaya",
+                remove: "Busak",
+                calculationResult: "Hasil Itungan",
+                originalValue: "Nilai Asli",
+                normalizedValue: "Nilai Normalisasi",
+                weightedValue: "Nilai Terbobot",
+                totalSAWScore: "Total Skor SAW",
+                weightedValuesChart: "Grafik Nilai Terbobot",
+                criteriaWeightsChart: "Grafik Bobot Kriteria",
+                rankingOfAlternatives: "Peringkat Alternatif",
+                rank: "Peringkat",
+                exportToCSV: "Ekspor ke CSV",
+                exportToPDF: "Ekspor ke PDF",
+                exportToExcel: "Ekspor ke Excel"
+            }
+        };
+    
+        // Function to update the language
+        function updateLanguage(lang) {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+    
+        // Event listener for language selector
+        document.getElementById('language-selector').addEventListener('change', function() {
+            updateLanguage(this.value);
+        });
+    
+        // Initial language update
+        updateLanguage('en');
+    </script>
+</body>
+</html>
+
+
+
+
